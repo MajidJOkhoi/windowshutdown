@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShutDown Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+            max-width: 100%;
+        }
+
+        .main p {
+            margin: 10px 0px;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .icons i, .icons h2 {
+            font-size: 40px;
+            color: #0078D4;
+            margin: 0 8px;
+        }
+
+        .options {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .options i {
+            font-size: 20px;
+            color: #0078D4;
+            margin-right: 8px;
+        }
+
+        .options p {
+            margin: 10px 0;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .options form select {
+            width: 100%;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            padding: 5px;
+            margin-bottom: 10px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .btns {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btns button {
+            width: 100px;
+            height: 35px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+            color: #333;
+            border: none;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btns button:hover {
+            background-color: #0078D4;
+            color: #fff;
+        }
+
+        @media screen and (max-width: 400px) {
+            .container {
+                padding: 15px;
+            }
+
+            .icons i, .icons h2 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main">
+            <p>Shut Down Windows</p>
+            <div class="icons">
+                <i class="fa-brands fa-windows"></i>
+                <h2>Windows 11</h2>
+            </div>
+            <div class="icons">
+                <i class="fa-solid fa-desktop"></i>
+                <p>What do you want the computer to do?</p>
+            </div>
+            <div class="options">
+                <form>
+                    <select name="action" id="action">
+                        <option value="shutdown">Shut down</option>
+                        <option value="restart">Restart</option>
+                        <option value="sleep">Sleep</option>
+                        <option value="hibernate">Hibernate</option>
+                        <option value="logoff">Log off</option>
+                        <option value="lock">Lock</option>
+                    </select>
+                </form>
+                <p>Closes all apps and turns off the PC.</p>
+            </div>
+            <div class="btns">
+                <button onclick="performAction('ok')">OK</button>
+                <button onclick="performAction('cancel')">Cancel</button>
+                <button onclick="performAction('help')">Help</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function performAction(action) {
+            const selectedAction = document.getElementById('action').value;
+            fetch('/perform-action', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ action: action, selectedAction: selectedAction }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                if (action === 'ok') {
+                    alert(`Performing action: ${selectedAction}`);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
